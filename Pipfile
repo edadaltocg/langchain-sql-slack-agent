@@ -1,0 +1,28 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+slack-bolt = "*"
+
+[dev-packages]
+ruff = "*"
+mypy = "*"
+pytest = "*"
+pipenv = "*"
+pytest-cov = "*"
+pytest-xdist = "*"
+pytest-benchmark = "*"
+pysnooper = "*"
+pyinstrument = "*"
+langchain = "*"
+slack-bolt = "*"
+faker = "*"
+fire = "*"
+pandas = "*"
+poetry = "*"
+mdpd = "*"
+
+[requires]
+python_version = "3.12"
