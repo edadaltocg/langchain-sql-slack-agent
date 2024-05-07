@@ -1,0 +1,16 @@
+column,type,description
+campaignid,INT,Unique identifier for each marketing campaign
+name,VARCHAR(100),Name of the campaign
+startdate,DATE,Start date of the campaign
+enddate,DATE,End date of the campaign
+budget,"DECIMAL(10,2)",Budget allocated for the campaign
+channel,VARCHAR(50),"Main channel used for the campaign (Email, Social Media, etc.)"
+targetaudience,VARCHAR(100),Description of the target audience
+leadsgenerated,INT,Number of leads generated from the campaign
+salesgenerated,INT,Number of sales generated from the campaign
+roi,FLOAT,Return on investment for the campaign
+active,BOOLEAN,Whether the campaign is currently active
+objective,VARCHAR(200),Main objective of the campaign
+creativesused,VARCHAR(255),Path to any creative materials used
+feedbackreceived,TEXT,Feedback received from customers about the campaign
+conversionrate,FLOAT,Conversion rate achieved by the campaign

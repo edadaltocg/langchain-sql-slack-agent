@@ -1,0 +1,37 @@
+column,type,description
+productid,INT,Unique identifier for each product
+name,VARCHAR(100),Name of the product
+category,VARCHAR(50),Category of the product
+price,"DECIMAL(10,2)",Price of the product
+description,TEXT,Detailed description of the product
+availability,BOOLEAN,Availability status of the product
+launchdate,DATE,Date when the product was launched
+discontinued,BOOLEAN,Whether the product is discontinued
+inventorycount,INT,Number of units currently in inventory
+vendor,VARCHAR(100),Supplier or manufacturer of the product
+productpageurl,VARCHAR(255),URL to the product's detail page
+sku,VARCHAR(50),Stock Keeping Unit identifier
+weight,"DECIMAL(10,2)",Weight of the product
+dimensions,VARCHAR(100),Dimensions of the product
+color,VARCHAR(50),Color of the product
+material,VARCHAR(50),Material of the product
+warrantyperiod,VARCHAR(50),Warranty period for the product
+returnpolicy,VARCHAR(100),Return policy details
+manufacturer,VARCHAR(100),Manufacturer of the product
+brand,VARCHAR(50),Brand of the product
+modelnumber,VARCHAR(50),Model number of the product
+upc,VARCHAR(20),Universal Product Code
+isbn,VARCHAR(20),International Standard Book Number (if applicable)
+msrp,"DECIMAL(10,2)",Manufacturer's Suggested Retail Price
+wholesaleprice,"DECIMAL(10,2)",Price offered to wholesalers
+recommendedretailprice,"DECIMAL(10,2)",Recommended retail price
+productioncost,"DECIMAL(10,2)",Cost of production per unit
+storagelocation,VARCHAR(50),Location in the warehouse
+safetystocklevel,INT,Minimum stock level to avoid stock-outs
+reorderpoint,INT,Inventory level that triggers a new order
+tags,VARCHAR(255),Search tags associated with the product
+promotioneligible,BOOLEAN,Whether the product is eligible for promotions
+importduty,"DECIMAL(10,2)",Import duty applicable (if imported)
+regulatoryapprovals,VARCHAR(255),Details of regulatory approvals (if applicable)
+ecofriendly,BOOLEAN,Whether the product is eco-friendly
+customizationsavailable,VARCHAR(255),Available customizations for the product

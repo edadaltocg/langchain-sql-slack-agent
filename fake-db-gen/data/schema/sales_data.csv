@@ -1,0 +1,33 @@
+column,type,description
+saleid,INT,Unique identifier for each sale transaction
+customerid,INT,ID of the customer making the purchase
+productid,INT,ID of the product sold
+saledate,DATE,Date when the sale occurred
+quantity,INT,Number of products sold
+totalamount,"DECIMAL(10,2)",Total amount of the transaction
+paymentmethod,VARCHAR(50),"Method used for payment (Credit card, PayPal, etc.)"
+salestatus,VARCHAR(50),"Status of the sale (Completed, Refunded, etc.)"
+shippingaddress,VARCHAR(200),Address to which the products are shipped
+billingaddress,VARCHAR(200),Address used for billing purposes
+shippingmethod,VARCHAR(50),"Method of shipping (Standard, Express, etc.)"
+trackingnumber,VARCHAR(50),Tracking number for shipment
+deliverystatus,VARCHAR(50),"Status of product delivery (Delivered, Pending, etc.)"
+promotionsapplied,VARCHAR(100),Promotions applied to the sale
+taxamount,"DECIMAL(10,2)",Amount of tax applied to the transaction
+discountamount,"DECIMAL(10,2)",Amount of discount applied to the transaction
+giftmessage,TEXT,Any gift message included with the purchase
+paymentstatus,VARCHAR(50),"Status of payment (Paid, Pending, Failed, etc.)"
+paymentdate,DATE,Date when the payment was processed
+paymentreference,VARCHAR(50),Reference number for the payment transaction
+paymentgateway,VARCHAR(50),Gateway used for processing the payment
+invoicenumber,VARCHAR(50),Invoice number for the sale
+returnrequested,BOOLEAN,Whether a return has been requested for the sale
+returnreason,VARCHAR(100),Reason provided for requesting a return
+returnapproved,BOOLEAN,Whether the return request has been approved
+returnprocessed,BOOLEAN,Whether the return has been processed
+returndate,DATE,Date when the return was processed
+refundamount,"DECIMAL(10,2)",Amount refunded for the return
+refundmethod,VARCHAR(50),"Method used for refund (Credit card, PayPal, etc.)"
+refundstatus,VARCHAR(50),"Status of the refund process (Completed, Pending)"
+refunddate,DATE,Date when the refund was processed
+refundreference,VARCHAR(50),Reference number for the refund transaction

@@ -1,0 +1,30 @@
+column,type,description
+eventid,INT,Unique identifier for each event
+customerid,INT,ID of the customer involved in the event
+eventtype,VARCHAR(50),"Type of event (Page Visit, Download, Signup, etc.)"
+eventdate,TIMESTAMP,Timestamp when the event occurred
+eventdetails,TEXT,Additional details about the event
+device,VARCHAR(50),"Device used for the event (Mobile, Desktop, etc.)"
+location,VARCHAR(100),Location of the customer during the event
+sessionid,VARCHAR(100),Unique session identifier for the event
+browsingduration,INT,Duration in seconds the customer spent during the event
+entrypage,VARCHAR(255),URL of the entry page for the event
+exitpage,VARCHAR(255),URL of the exit page for the event
+referrerurl,VARCHAR(255),URL of the referrer site
+ipaddress,VARCHAR(50),IP address of the customer during the event
+browser,VARCHAR(50),Browser used by the customer
+os,VARCHAR(50),Operating system of the device used
+clickscount,INT,Number of clicks made during the event
+pageviewscount,INT,Number of page views during the event
+conversion,BOOLEAN,Whether the event led to a conversion
+conversiontype,VARCHAR(50),"Type of conversion (Purchase, Subscription, etc.)"
+userid,INT,Internal user ID linked to the customer
+interactionsdetails,TEXT,Details of interactions during the event
+geolocation,VARCHAR(100),Geographical location based on IP address
+timezone,VARCHAR(50),Local timezone of the event
+language,VARCHAR(50),Language preference detected during the event
+ismobile,BOOLEAN,Whether the event was on a mobile device
+isnewvisitor,BOOLEAN,Whether the visitor was new to the site
+engagementlevel,VARCHAR(50),"Level of engagement during the event (High, Medium, Low)"
+actionsperformed,TEXT,Description of any actions performed during the event
+leadgenerationsuccess,BOOLEAN,Whether the event successfully generated a lead

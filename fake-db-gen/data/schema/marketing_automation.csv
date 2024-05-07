@@ -1,0 +1,30 @@
+column,type,description
+automationid,INT,Unique identifier for each automation task
+campaignid,INT,ID of the associated marketing campaign
+triggerevent,VARCHAR(100),Event that triggers the automation
+action,VARCHAR(100),"Action taken by the automation (Send Email, Notify Sales)"
+status,VARCHAR(50),"Current status of the automation (Active, Paused, Ended)"
+lastrun,TIMESTAMP,Last time the automation was executed
+createddate,DATE,Date when the automation was created
+modifieddate,DATE,Date when the automation was last modified
+createdby,INT,User ID of the person who created the automation
+modifiedby,INT,User ID of the person who last modified the automation
+automationname,VARCHAR(100),Name of the automation
+description,TEXT,Detailed description of the automation
+triggerconditions,TEXT,Conditions that trigger the automation
+actiondetails,TEXT,Detailed description of the action taken
+executionfrequency,VARCHAR(50),"How often the automation runs (Daily, Weekly, On Event)"
+nextrun,TIMESTAMP,Scheduled next run time for the automation
+enddate,DATE,Scheduled end date for the automation
+priority,INT,Priority level of the automation
+errorhandling,VARCHAR(100),How errors are handled during automation execution
+notificationsettings,TEXT,Settings for notifications related to the automation
+resulttracking,BOOLEAN,Whether results of the automation are tracked
+resultdata,TEXT,Data collected from the results of the automation
+feedbackloopenabled,BOOLEAN,Whether a feedback loop is enabled for continuous improvement
+dependencies,VARCHAR(255),Other automations or processes this depends on
+notes,TEXT,Additional notes about the automation
+impactlevel,VARCHAR(50),"Estimated impact level of the automation (High, Medium, Low)"
+customersegmenttargeted,VARCHAR(100),Customer segment targeted by the automation
+performancemetrics,TEXT,Metrics used to measure the performance of the automation
+isactive,BOOLEAN,Whether the automation is currently active

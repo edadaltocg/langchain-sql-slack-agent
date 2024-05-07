@@ -1,0 +1,13 @@
+column,type,description
+interactionid,INT,Unique identifier for each interaction
+customerid,INT,ID of the customer involved
+campaignid,INT,ID of the campaign associated with the interaction
+interactiontype,VARCHAR(50),"Type of interaction (Email, Call, Meeting, etc.)"
+interactiondate,DATE,Date of the interaction
+duration,INT,Duration of the interaction in minutes
+outcome,VARCHAR(100),"Outcome of the interaction (Positive, Negative, Neutral)"
+notes,TEXT,Additional notes about the interaction
+followuprequired,BOOLEAN,If follow-up is required
+followupdate,DATE,Scheduled date for follow-up
+agentid,INT,ID of the agent who handled the interaction
+satisfactionscore,INT,Customer satisfaction score from the interaction

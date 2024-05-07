@@ -1,0 +1,21 @@
+column,type,description
+expenseid,INT,Unique identifier for each expense record
+employeeid,INT,ID of the employee who made the expense
+tripid,INT,Associated trip ID for the expense
+date,DATE,Date when the expense was incurred
+category,VARCHAR(50),"Category of the expense (Travel, Food, etc.)"
+amount,"DECIMAL(10,2)",Amount of the expense
+currency,VARCHAR(10),Currency in which the expense was made
+paymentmethod,VARCHAR(50),"Method used for payment (Credit card, Cash)"
+description,VARCHAR(200),Detailed description of the expense
+receipt,BOOLEAN,Whether a receipt was provided
+approved,BOOLEAN,Whether the expense has been approved
+approvaldate,DATE,Date when the expense was approved
+taxdeductible,BOOLEAN,If the expense is tax deductible
+vendor,VARCHAR(100),Vendor from whom the expense was purchased
+location,VARCHAR(100),Location where the expense was incurred
+projectcode,VARCHAR(50),Code for the project related to the expense
+reimbursed,BOOLEAN,If the expense has been reimbursed
+reimbursementdate,DATE,Date when the expense was reimbursed
+notes,TEXT,Any additional notes about the expense
+attachmentpath,VARCHAR(255),Path to any attachments related to the expense

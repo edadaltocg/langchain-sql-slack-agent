@@ -1,0 +1,28 @@
+column,type,description
+feedbackid,INT,Unique identifier for each feedback entry
+customerid,INT,ID of the customer providing feedback
+productid,INT,ID of the product related to the feedback
+rating,INT,Rating given by the customer (1-5 scale)
+comment,TEXT,Detailed comment or feedback from customer
+datereceived,DATE,Date when the feedback was received
+responsesent,BOOLEAN,Whether a response has been sent to the customer
+responsedate,DATE,Date when the response was sent
+feedbackchannel,VARCHAR(50),"Channel through which the feedback was received (Online, In-Store)"
+followupneeded,BOOLEAN,Whether follow-up action is needed
+followupdate,DATE,Scheduled date for follow-up action
+followupstatus,VARCHAR(50),"Status of follow-up (Pending, Completed)"
+customersatisfactionlevel,VARCHAR(50),"Level of customer satisfaction (High, Medium, Low)"
+issueresolved,BOOLEAN,Whether the customer's issue was resolved
+resolutiondetails,TEXT,Details about how the issue was resolved
+agentid,INT,ID of the agent who handled the feedback
+feedbackimportance,VARCHAR(50),"Importance level of the feedback (Critical, Moderate, Low)"
+internalnotes,TEXT,Notes for internal use regarding the feedback
+customercontactedagain,BOOLEAN,Whether the customer was contacted again post-feedback
+additionalcompensationoffered,"DECIMAL(10,2)","Compensation amount offered, if any"
+compensationaccepted,BOOLEAN,Whether the customer accepted the offered compensation
+relatedcampaignid,INT,ID of marketing campaign related to the feedback
+productreturninitiated,BOOLEAN,Whether a product return was initiated
+returnreason,VARCHAR(100),"Reason for product return, if applicable"
+productreplacementoffered,BOOLEAN,Whether a product replacement was offered
+replacementproductid,INT,ID of the replacement product offered
+customerretentionactions,VARCHAR(255),Actions taken to retain the customer

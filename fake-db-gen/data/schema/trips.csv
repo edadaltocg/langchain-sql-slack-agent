@@ -1,0 +1,21 @@
+column,type,description
+tripid,INT,Unique identifier for each trip
+employeeid,INT,ID of the employee going on the trip
+destination,VARCHAR(100),Main destination of the trip
+purpose,VARCHAR(100),"Purpose of the trip (Business, Conference)"
+startdate,DATE,Start date of the trip
+enddate,DATE,End date of the trip
+status,VARCHAR(50),"Current status of the trip (Planned, Ongoing, Completed)"
+totalbudget,"DECIMAL(10,2)",Total budget allocated for the trip
+advanceamount,"DECIMAL(10,2)",Advance amount given for the trip
+expensesclaimed,"DECIMAL(10,2)",Total expenses claimed till now
+department,VARCHAR(100),Department organizing the trip
+bookingreference,VARCHAR(50),Booking reference number
+accommodation,VARCHAR(200),Accommodation details for the trip
+transportmode,VARCHAR(50),"Primary mode of transport (Flight, Train, etc.)"
+reportingmanager,VARCHAR(100),Manager to whom the trip is reported
+approvalstatus,VARCHAR(50),Approval status of the trip
+approvaldate,DATE,Date when the trip was approved
+notes,TEXT,Any additional notes about the trip
+attachmentpath,VARCHAR(255),Path to any attachments related to the trip
+lastmodified,TIMESTAMP,Last modification timestamp of the trip record
