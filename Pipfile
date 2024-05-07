@@ -23,6 +23,7 @@ fire = "*"
 pandas = "*"
 poetry = "*"
 mdpd = "*"
+transformers = "*"
 
 [requires]
 python_version = "3.12"
