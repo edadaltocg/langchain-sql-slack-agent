@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "fake-db-gen"
+version = "0.1.0"
+description = ""
+authors = ["Eduardo Dadalto <edadaltocg@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.12,<3.13"
+faker = "^25.0.1"
+fire = "^0.6.0"
+pandas = "^2.2.2"
+mdpd = "^0.2.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
