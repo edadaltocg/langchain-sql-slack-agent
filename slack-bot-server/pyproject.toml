@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "slack-bot-server"
+version = "0.1.0"
+description = ""
+authors = ["Eduardo Dadalto <edadaltocg@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+slack-bolt = "^1.18.1"
+langchain = "^0.1.17"
+langserve = {extras = ["all"], version = "^0.1.1"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
