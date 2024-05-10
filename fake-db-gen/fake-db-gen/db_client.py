@@ -1,4 +1,4 @@
-from pymilvus import MilvusClient, DataType
+from pymilvus import DataType, MilvusClient
 
 # 1. Set up a Milvus client
 client = MilvusClient(uri="http://localhost:19530")

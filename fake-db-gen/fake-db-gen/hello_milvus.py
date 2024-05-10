@@ -6,13 +6,12 @@
 # 5. search, query, and hybrid search on entities
 # 6. delete entities by PK
 # 7. drop collection
+import random
+import string
 import time
 
 import numpy as np
-import string
-import random
-
-from pymilvus import MilvusClient, DataType
+from pymilvus import DataType, MilvusClient
 
 fmt = "\n=== {:30} ===\n"
 search_latency_fmt = "search latency = {:.4f}s"
@@ -27,7 +26,7 @@ num_entities, dim = 3000, 8
 #
 # Note: the `using` parameter of the following methods is default to "default".
 print(fmt.format("start connecting to Milvus"))
-client = MilvusClient(uri="http://localhost:19530") # Replace with your Milvus server address
+client = MilvusClient(uri="http://localhost:19530")  # Replace with your Milvus server address
 
 has = client.has_collection("hello_milvus")
 print(f"Does collection hello_milvus exist in Milvus: {has}")
@@ -57,11 +56,7 @@ schema.add_field(field_name="random", datatype=DataType.DOUBLE)
 schema.add_field(field_name="embeddings", datatype=DataType.FLOAT_VECTOR, dim=dim)
 
 print(fmt.format("Create collection `hello_milvus`"))
-client.create_collection(
-    collection_name="hello_milvus", 
-    schema=schema,
-    consistency_level="Strong"
-)
+client.create_collection(collection_name="hello_milvus", schema=schema, consistency_level="Strong")
 
 ################################################################################
 # 3. insert data
@@ -74,8 +69,10 @@ client.create_collection(
 
 print(fmt.format("Start inserting entities"))
 
+
 def generate_random_string(length):
-    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(length))
+    return "".join(random.choice(string.ascii_letters + string.digits) for _ in range(length))
+
 
 def generate_random_entities(num_entities, dim):
     entities = []
@@ -85,6 +82,7 @@ def generate_random_entities(num_entities, dim):
         embeddings = np.random.rand(dim).tolist()  # Generate a random float vector of dimension 'dim'
         entities.append({"pk": pk, "random": random_value, "embeddings": embeddings})
     return entities
+
 
 entities = generate_random_entities(num_entities, dim)
 
@@ -103,21 +101,11 @@ print(fmt.format("Start Creating index IVF_FLAT"))
 
 index_params = client.prepare_index_params()
 
-index_params.add_index(
-    field_name="pk"
-)
+index_params.add_index(field_name="pk")
 
-index_params.add_index(
-    field_name="embeddings", 
-    index_type="IVF_FLAT",
-    metric_type="L2",
-    params={"nlist": 128}
-)
+index_params.add_index(field_name="embeddings", index_type="IVF_FLAT", metric_type="L2", params={"nlist": 128})
 
-client.create_index(
-    collection_name="hello_milvus",
-    index_params=index_params
-)
+client.create_index(collection_name="hello_milvus", index_params=index_params)
 
 ################################################################################
 # 5. search, query, and hybrid search
@@ -144,11 +132,11 @@ search_params = {
 start_time = time.time()
 result = client.search(
     collection_name="hello_milvus",
-    data=vectors_to_search, 
-    anns_field="embeddings", 
-    search_params=search_params, 
-    limit=3, 
-    output_fields=["random"]
+    data=vectors_to_search,
+    anns_field="embeddings",
+    search_params=search_params,
+    limit=3,
+    output_fields=["random"],
 )
 end_time = time.time()
 
@@ -162,11 +150,7 @@ print(search_latency_fmt.format(end_time - start_time))
 print(fmt.format("Start querying with `random > 0.5`"))
 
 start_time = time.time()
-result = client.query(
-    collection_name="hello_milvus",
-    filter="random > 0.5", 
-    output_fields=["random", "embeddings"]
-)
+result = client.query(collection_name="hello_milvus", filter="random > 0.5", output_fields=["random", "embeddings"])
 end_time = time.time()
 
 print(f"query result:\n-{result[0]}")
@@ -174,19 +158,8 @@ print(search_latency_fmt.format(end_time - start_time))
 
 # -----------------------------------------------------------------------------
 # pagination
-r1 = client.query(
-    collection_name="hello_milvus",
-    filter="random > 0.5", 
-    limit=4, 
-    output_fields=["random"]
-)
-r2 = client.query(
-    collection_name="hello_milvus",
-    filter="random > 0.5", 
-    offset=1, 
-    limit=3, 
-    output_fields=["random"]
-)
+r1 = client.query(collection_name="hello_milvus", filter="random > 0.5", limit=4, output_fields=["random"])
+r2 = client.query(collection_name="hello_milvus", filter="random > 0.5", offset=1, limit=3, output_fields=["random"])
 print(f"query pagination(limit=4):\n\t{r1}")
 print(f"query pagination(offset=1, limit=3):\n\t{r2}")
 
@@ -198,12 +171,12 @@ print(fmt.format("Start filtered searching with `random > 0.5`"))
 start_time = time.time()
 result = client.search(
     collection_name="hello_milvus",
-    data=vectors_to_search, 
-    anns_field="embeddings", 
-    search_params=search_params, 
-    limit=3, 
-    filter="random > 0.5", 
-    output_fields=["random"]
+    data=vectors_to_search,
+    anns_field="embeddings",
+    search_params=search_params,
+    limit=3,
+    filter="random > 0.5",
+    output_fields=["random"],
 )
 end_time = time.time()
 
@@ -220,23 +193,12 @@ ids = [entity["pk"] for entity in entities]
 expr = f'pk in ["{ids[0]}", "{ids[1]}"]'
 print(fmt.format(f"Start deleting with expr `{expr}`"))
 
-result = client.query(
-    collection_name="hello_milvus",
-    filter=expr, 
-    output_fields=["random", "embeddings"]
-)
+result = client.query(collection_name="hello_milvus", filter=expr, output_fields=["random", "embeddings"])
 print(f"query before delete by expr=`{expr}` -> result: \n-{result[0]}\n-{result[1]}\n")
 
-client.delete(
-    collection_name="hello_milvus",
-    filter=expr
-)
+client.delete(collection_name="hello_milvus", filter=expr)
 
-result = client.query(
-    collection_name="hello_milvus",
-    filter=expr, 
-    output_fields=["random", "embeddings"]
-)
+result = client.query(collection_name="hello_milvus", filter=expr, output_fields=["random", "embeddings"])
 print(f"query after delete by expr=`{expr}` -> result: {result}\n")
 
 ###############################################################################

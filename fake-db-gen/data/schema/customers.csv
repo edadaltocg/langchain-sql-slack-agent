@@ -14,7 +14,6 @@ totalpurchases,INT,Total number of purchases made by the customer
 totalspend,"DECIMAL(10,2)",Total amount spent by the customer
 preferredcategory,VARCHAR(50),Most purchased category of products
 membershipstatus,VARCHAR(50),"Status of any membership program (Active, Inactive)"
-churnriskscore,FLOAT,Predicted churn risk score
 lastactivity,DATE,Date of last activity by the customer
 subscriptiontype,VARCHAR(50),Type of subscription if any
 leadscore,INT,Score indicating the quality of the lead

@@ -24,6 +24,8 @@ pandas = "*"
 poetry = "*"
 mdpd = "*"
 transformers = "*"
+lark = "*"
+bs4 = "*"
 
 [requires]
 python_version = "3.12"

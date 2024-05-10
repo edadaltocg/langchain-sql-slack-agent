@@ -1,10 +1,10 @@
-import os
 import csv
+import os
+from pathlib import Path
+
 import mdpd
 import pandas as pd
-from pathlib import Path
 from faker import Faker
-import utils
 
 pd.set_option("display.max_columns", 100)
 pd.set_option("display.width", 1000)

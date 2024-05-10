@@ -15,7 +15,6 @@
 | TotalSpend | DECIMAL(10,2) | Total amount spent by the customer |
 | PreferredCategory | VARCHAR(50) | Most purchased category of products |
 | MembershipStatus | VARCHAR(50) | Status of any membership program (Active, Inactive) |
-| ChurnRiskScore | FLOAT | Predicted churn risk score |
 | LastActivity | DATE | Date of last activity by the customer |
 | SubscriptionType | VARCHAR(50) | Type of subscription if any |
 | LeadScore | INT | Score indicating the quality of the lead |
