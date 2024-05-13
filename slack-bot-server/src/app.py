@@ -9,7 +9,7 @@ from slack_bolt.adapter.socket_mode import SocketModeHandler
 logging.basicConfig(level=logging.DEBUG)
 
 conversational_rag_chain = RemoteRunnable(
-    f"http://{os.environ.get("REMOTE_HOST", "localhost")}:{os.environ.get("REMOTE_PORT", "8000")}/rag-conversational/"
+    f"http://{os.environ.get('REMOTE_HOST', 'localhost')}:{os.environ.get('REMOTE_PORT', '8000')}/rag-conversational/"
 )
 
 app = App(token=os.environ["SLACK_BOT_TOKEN"], signing_secret=os.environ["SLACK_SIGNING_SECRET"])
