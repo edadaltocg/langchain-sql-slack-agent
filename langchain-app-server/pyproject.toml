@@ -7,7 +7,7 @@ readme = "README.md"
 packages = [{ include = "app" }]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.8"
 uvicorn = "^0.23.2"
 langserve = { extras = ["server"], version = ">=0.0.30" }
 pydantic = "<2"

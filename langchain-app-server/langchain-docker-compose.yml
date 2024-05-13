@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: ./Dockerfile
     container_name: langchain-server
-    environment: [OPENAI_API_KEY=$OPENAI_API_KEY, URL=host.docker.internal]
+    environment: [OPENAI_API_KEY=$OPENAI_API_KEY, URL=$URL]
     ports: [8080:8080]
     restart: on-failure
     command: uvicorn app.server:app --host 0.0.0.0 --port 8080
