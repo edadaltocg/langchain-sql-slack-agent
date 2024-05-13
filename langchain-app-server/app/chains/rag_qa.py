@@ -1,19 +1,24 @@
 from operator import itemgetter
-
+from pprint import pprint
 from langchain.prompts import ChatPromptTemplate
-from langchain.schema.messages import HumanMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import Runnable, RunnableLambda, RunnableParallel, RunnablePassthrough, chain
+from langchain_core.runnables import ConfigurableField, RunnableParallel, RunnablePassthrough, chain
 from langchain_openai import ChatOpenAI
 from langserve.schema import CustomUserType
+from pydantic import BaseModel, Field
+from typing import Any, List, Optional, Sequence, Tuple, Union
 
-store = {}
+store: dict[str, list[str]] = {}
 
 
-class AssistantInput(CustomUserType):
-    input: str
+class InputDict(BaseModel):
+    question: str
     session_id: str
+    chat_history: list[str] = Field(
+        [],
+        extra={"widget": {"type": "chat", "input": "question", "output": "answer"}},
+    )
 
 
 def make_conversational_rag_chain(
@@ -46,38 +51,37 @@ Data Scientists
 
 # Chat History:
 {chat_history}
+Human: {question}
+AI: """
 
-Let's think step-by-step.
-"""
+    prompt = ChatPromptTemplate.from_template(system_prompt_template)
 
-    prompt = ChatPromptTemplate.from_messages(
-        [
-            ("system", system_prompt_template),
-            ("human", "{question}"),
-        ]
-    )
-
-    query_llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=1)
-    llm = ChatOpenAI(model="gpt-4-turbo-2024-04-09", temperature=1)
+    temperature = 0
+    query_llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=temperature)
+    llm = ChatOpenAI(model="gpt-4-turbo-2024-04-09", temperature=temperature)
 
     @chain
-    def get_session_history(input_dict: dict[str, str]):
-        session_id = input_dict.get("session_id", "123")
+    def get_session_history(input_dict: dict[str, Any]):  # InputDict):
+        if isinstance(input_dict, dict):
+            input_dict = InputDict(**input_dict)
+        session_id = input_dict.session_id
         if session_id not in store:
             store[session_id] = []
-        input_dict["chat_history"] = store[session_id]
-        print(input_dict)
-        return input_dict
+        input_dict.chat_history = store[session_id]
+        # transform to dict for the next step
+        input_dict_ = input_dict.dict()
+        return input_dict_
 
     @chain
     def set_messages(kwargs):
         session_id = kwargs["past"]["session_id"]
         question = kwargs["past"]["question"]
-        store[session_id].append(f"User: {question}")
+        store[session_id].append(f"Human: {question}")
         resp = kwargs["llm"]
         content = resp.content
-        store[session_id].append(f"Assistant: {content}")
-        return resp
+        store[session_id].append(f"AI: {content}")
+        pprint(kwargs)
+        return content
 
     contextualize_q_system_prompt = """Given a chat history and the latest user question \
 which might reference context in the chat history, formulate a standalone question \
@@ -86,22 +90,18 @@ just reformulate it if needed and otherwise return it as is.
 
 Chat History:
 {chat_history}
-"""
-    contextualize_q_prompt = ChatPromptTemplate.from_messages(
-        [
-            ("system", contextualize_q_system_prompt),
-            ("human", "{input}"),
-        ]
-    )
+Follow Up Question: {question}
+Standalone Question: """
+    contextualize_q_prompt = ChatPromptTemplate.from_template(contextualize_q_system_prompt)
 
     rag_chain = (
         get_session_history
         | {
-            "question": itemgetter("input"),
+            "question": itemgetter("question"),
             "session_id": itemgetter("session_id"),
             "chat_history": itemgetter("chat_history"),
-            "context": contextualize_q_prompt | llm | StrOutputParser() | docs_retriever | docs_to_str,
-            "people": contextualize_q_prompt | llm | StrOutputParser() | people_retriever | people_to_str,
+            "context": contextualize_q_prompt | query_llm | StrOutputParser() | docs_retriever | docs_to_str,
+            "people": contextualize_q_prompt | query_llm | StrOutputParser() | people_retriever | people_to_str,
         }
         | RunnableParallel({"llm": prompt | llm, "past": RunnablePassthrough()})
         | set_messages
