@@ -1,0 +1,16 @@
+---
+version: '3'
+services:
+  slack-bot:
+    container_name: slack-bot
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      - REMOTE_HOST=host.docker.internal
+      - REMOTE_PORT=8080
+      - SLACK_BOT_TOKEN=$SLACK_BOT_TOKEN
+      - SLACK_SIGNING_SECRET=$SLACK_SIGNING_SECRET
+      - SLACK_APP_TOKEN=$SLACK_APP_TOKEN
+    restart: on-failure
+    command: python3 src/app.py

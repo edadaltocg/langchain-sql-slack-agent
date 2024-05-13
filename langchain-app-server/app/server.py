@@ -65,9 +65,7 @@ rag_prompt = ChatPromptTemplate.from_messages(messages)
 def docs_to_str(docs: list[Document]):
     out = ""
     for doc in docs:
-        out += f"""table: `{doc.metadata['table']}`, \
-        column: `{doc.metadata['column']}`, \
-        description: \"{doc.page_content}\"\n"""
+        out += f"{doc.page_content}\n"
     return out
 
 
@@ -75,20 +73,18 @@ def docs_to_str(docs: list[Document]):
 def people_to_str(people: list[Document]):
     out = ""
     for doc in people:
-        out += f"name: `{doc.metadata['name']}`, \
-        seniority: `{doc.metadata['seniority']}`, \
-        {doc.page_content} \n"
+        out += f"{doc.page_content}\n"
     return out
 
 
 docs_field_metadata = [
     AttributeInfo(name="table", description="The name of the table", type="string"),
-    AttributeInfo(name="column", description="The name of the column", type="string"),
+    # AttributeInfo(name="column", description="The name of the column", type="string"),
 ]
 
 people_field_metadata = [
-    AttributeInfo(name="name", description="The name of the person", type="string"),
-    AttributeInfo(name="seniority", description="The seniority of the person", type="string"),
+    # AttributeInfo(name="name", description="The name of the person", type="string"),
+    # AttributeInfo(name="seniority", description="The seniority of the person", type="string"),
     AttributeInfo(name="tables_created", description="The names of the tables the person has created", type="string"),
 ]
 
@@ -112,8 +108,12 @@ docs_retriever = SelfQueryRetriever.from_llm(
     docs_field_metadata,
     verbose=True,
     enable_limit=True,
-    search_kwargs={"k": 20},
+    search_kwargs={"k": 25},
     # search_kwargs={"score_threshold": 0.45},
+)
+docs_retriever = doc_vector_store.as_retriever(
+    search_type="mmr",
+    search_kwargs={"k": 25, "score_threshold": 0.25},
 )
 
 people_content_description = "Tables created and job description of a data person"
@@ -124,8 +124,12 @@ people_retriever = SelfQueryRetriever.from_llm(
     people_field_metadata,
     verbose=True,
     enable_limit=True,
-    search_kwargs={"k": 20},
+    search_kwargs={"k": 1},
     # search_kwargs={"score_threshold": 0.45},
+)
+people_retriever = people_vector_store.as_retriever(
+    search_type="mmr",
+    search_kwargs={"k": 1, "score_threshold": 0.25},
 )
 
 rerank_model = ...  # TODO:

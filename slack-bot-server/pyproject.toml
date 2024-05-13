@@ -6,10 +6,10 @@ authors = ["Eduardo Dadalto <edadaltocg@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.11"
 slack-bolt = "^1.18.1"
 langchain = "^0.1.17"
-langserve = {extras = ["all"], version = "^0.1.1"}
+langserve = { extras = ["all"], version = "^0.1.1" }
 
 
 [build-system]

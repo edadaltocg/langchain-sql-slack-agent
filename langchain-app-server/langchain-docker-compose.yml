@@ -1,0 +1,13 @@
+---
+version: '3.5'
+services:
+  langchain:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: langchain-server
+    environment: [OPENAI_API_KEY=$OPENAI_API_KEY, URL=host.docker.internal]
+    ports: [8080:8080]
+    restart: on-failure
+    command: uvicorn app.server:app --host 0.0.0.0 --port 8080
+    volumes: ['${DOCKER_VOLUME_DIRECTORY:-.}/volumes/langchain:/code/app/data']

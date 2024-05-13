@@ -9,6 +9,33 @@ from langserve.schema import CustomUserType
 from pydantic import BaseModel, Field
 from typing import Any, List, Optional, Sequence, Tuple, Union
 
+
+system_prompt_template_v0 = """You are an assistant for data question-answering tasks. \
+Use the following pieces of retrieved context and people to answer the question. \
+If you don't know the answer, just say that you don't know. \
+Be concise in your response. Never repeat yourself on follow up responses.
+
+# Instruction
+Inform the user with all relevant columns and all relevant tables to look based on the [Context]. \
+Tag one relevant person with @<person name> who might know the answer, but only if necessary and only on the first message.
+
+# Objective
+You aim to identify potential features and target variable for the analysis.
+
+# Audience
+Data Scientists
+
+# Context
+{context}
+
+# People
+{people}
+
+# Chat History
+{chat_history}
+Human: {question}
+AI: """
+
 store: dict[str, list[str]] = {}
 
 
@@ -27,29 +54,30 @@ def make_conversational_rag_chain(
     docs_to_str,
     people_to_str,
 ):
-    system_prompt_template = """
-You are an assistant for data question-answering tasks. \
-Use the following pieces of retrieved context and people to answer the question. \
-If you don't know the answer, just say that you don't know. \
-Be concise in your response. Never repeat yourself on follow up responses.
+    system_prompt_template = """You are Future Frame, an AI assistant who answers questions \
+related to the data warehouse.
+You are interacting mainly with data scientists and business analysts.
+Use the context to answer the question asked.
+If you are uncertain, you can ask people for help by tagging the person \
+who is most likely to know the answer.
+Be concise in your response.
+Never repeat yourself on follow-up responses.
+Think step by step.
 
-# Instruction
-Inform the user with all relevant columns and all relevant tables to look. \
-Tag one relevant person with @<person name> who might know the answer, but only if necessary and only on the first message.
+Instructions:
+Be precise in your answer: mention the relevant tables and columns that \
+could help the user.
+Be actionable: suggest precise next steps that the user needs to perform \
+to achieve their goal.
+Tag one relevant person with @<person name> who might know the answer, but only if necessary.
 
-# Objective
-You aim to identify potential features and target variable for the analysis.
-
-# Audience
-Data Scientists
-
-# Context:
+Context:
 {context}
 
-# People:
+People:
 {people}
 
-# Chat History:
+Chat History:
 {chat_history}
 Human: {question}
 AI: """
@@ -100,8 +128,8 @@ Standalone Question: """
             "question": itemgetter("question"),
             "session_id": itemgetter("session_id"),
             "chat_history": itemgetter("chat_history"),
-            "context": contextualize_q_prompt | query_llm | StrOutputParser() | docs_retriever | docs_to_str,
-            "people": contextualize_q_prompt | query_llm | StrOutputParser() | people_retriever | people_to_str,
+            "context": contextualize_q_prompt | llm | StrOutputParser() | docs_retriever | docs_to_str,
+            "people": contextualize_q_prompt | llm | StrOutputParser() | people_retriever | people_to_str,
         }
         | RunnableParallel({"llm": prompt | llm, "past": RunnablePassthrough()})
         | set_messages

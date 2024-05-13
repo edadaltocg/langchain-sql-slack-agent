@@ -4,21 +4,23 @@ version = "0.1.0"
 description = ""
 authors = ["Eduardo Dadalto <edadaltocg@gmail.com>"]
 readme = "README.md"
-packages = [
-    { include = "app" },
-]
+packages = [{ include = "app" }]
 
 [tool.poetry.dependencies]
 python = "^3.11"
 uvicorn = "^0.23.2"
-langserve = {extras = ["server"], version = ">=0.0.30"}
+langserve = { extras = ["server"], version = ">=0.0.30" }
 pydantic = "<2"
 langchain-openai = "^0.1.6"
-langchain-community = "^0.0.36"
+langchain-community = "^0.0.38"
+langchain = "^0.1.20"
+pymilvus = "^2.4.1"
+lark = "^1.1.9"
 
 
 [tool.poetry.group.dev.dependencies]
 langchain-cli = ">=0.0.15"
+pandas = "^2.2.2"
 
 [build-system]
 requires = ["poetry-core"]
