@@ -16,10 +16,10 @@ app = App(token=os.environ["SLACK_BOT_TOKEN"], signing_secret=os.environ["SLACK_
 
 
 @app.event("app_mention")
-def handle_mentions(body, say, logger):
-    logger.debug(body)
+def handle_mentions(event, say, logger):
+    logger.debug(event)
 
-    event = body["event"]
+    event = event["event"]
     logger.info(event)
 
     user_id = event["user"]
@@ -42,6 +42,11 @@ def handle_mentions(body, say, logger):
     except Exception as e:
         say(text="An error occurred. Please try again later.", thread_ts=thread_ts)
         logger.error(f"Error handling mention: {e}")
+
+
+@app.event("message")
+def handle_channel_messages(event, say, logger):
+    logger.debug("################# MESSAGE SENT BODY:", event)
 
 
 if __name__ == "__main__":

@@ -77,6 +77,14 @@ def people_to_str(people: list[Document]):
     return out
 
 
+@chain
+def slack_to_str(slack_messages: list[Document]):
+    out = ""
+    for doc in slack_messages:
+        out += f"{doc.page_content}\n"
+    return out
+
+
 docs_field_metadata = [
     AttributeInfo(name="table", description="The name of the table", type="string"),
     # AttributeInfo(name="column", description="The name of the column", type="string"),
@@ -88,17 +96,25 @@ people_field_metadata = [
     AttributeInfo(name="tables_created", description="The names of the tables the person has created", type="string"),
 ]
 
+tag = "_0_1_0"
 doc_vector_store = Milvus(
     embedding_function=embeddings,
     connection_args=connection_args,
-    collection_name="tables",
+    collection_name=f"tables{tag}",
 )
 
 people_vector_store = Milvus(
     embedding_function=embeddings,
     connection_args=connection_args,
-    collection_name="people",
+    collection_name=f"people{tag}",
 )
+
+slack_vector_store = Milvus(
+    embedding_function=embeddings,
+    connection_args=connection_args,
+    collection_name=f"slack{tag}",
+)
+
 
 document_content_description = "Description of a column in a table"
 docs_retriever = SelfQueryRetriever.from_llm(
@@ -112,8 +128,7 @@ docs_retriever = SelfQueryRetriever.from_llm(
     # search_kwargs={"score_threshold": 0.45},
 )
 docs_retriever = doc_vector_store.as_retriever(
-    search_type="mmr",
-    search_kwargs={"k": 25, "score_threshold": 0.25},
+    search_kwargs={"score_threshold": 0.65},
 )
 
 people_content_description = "Tables created and job description of a data person"
@@ -129,7 +144,13 @@ people_retriever = SelfQueryRetriever.from_llm(
 )
 people_retriever = people_vector_store.as_retriever(
     search_type="mmr",
-    search_kwargs={"k": 1, "score_threshold": 0.25},
+    search_kwargs={"k": 1},
+)
+
+slack_content_description = "Slack threads"
+slack_retriever = slack_vector_store.as_retriever(
+    search_type="mmr",
+    search_kwargs={"k": 1, "fetch_k": 5},
 )
 
 rerank_model = ...  # TODO:
@@ -144,7 +165,9 @@ rag_chain = (
     | response_model
 )  # | StrOutputParser()
 
-conversational_rag_chain = make_conversational_rag_chain(docs_retriever, people_retriever, docs_to_str, people_to_str)
+conversational_rag_chain = make_conversational_rag_chain(
+    docs_retriever, people_retriever, slack_retriever, docs_to_str, people_to_str, slack_to_str
+)
 
 # print(conversational_rag_chain.invoke({"question": "What is the description of the column age?", "session_id": "123"}))
 # print(conversational_rag_chain.invoke({"question": "Say the name of the column in caps", "session_id": "123"}))

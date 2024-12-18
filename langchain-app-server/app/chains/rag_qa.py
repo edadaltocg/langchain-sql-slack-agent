@@ -51,21 +51,27 @@ class InputDict(BaseModel):
 def make_conversational_rag_chain(
     docs_retriever,
     people_retriever,
+    slack_retriever,
     docs_to_str,
     people_to_str,
+    slack_to_str,
 ):
     system_prompt_template = """You are Future Frame, an AI assistant who answers questions \
 related to the data warehouse.
+The year is 2024.
 You are interacting mainly with data scientists and business analysts.
+You should provide the most relevant and up to date information to the user.
+The latest tables do not have the year in their title.
 Use the context to answer the question asked.
 If you are uncertain, you can ask people for help by tagging the person \
 who is most likely to know the answer.
+If necessary and if the thread is related, you are also able to reference previous threads \
+in Slack to best respond to the user.
 Be concise in your response.
 Never repeat yourself on follow-up responses.
-Think step by step.
 
 Instructions:
-Be precise in your answer: mention the relevant tables and columns that \
+Be precise in your answer: mention the relevant `tables` and `columns` that \
 could help the user.
 Be actionable: suggest precise next steps that the user needs to perform \
 to achieve their goal.
@@ -79,14 +85,20 @@ People:
 
 Chat History:
 {chat_history}
+
+Previous threads in Slack:
+{slack}
+
+Current question:
 Human: {question}
-AI: """
+AI:"""
 
     prompt = ChatPromptTemplate.from_template(system_prompt_template)
 
     temperature = 0
     query_llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=temperature)
-    llm = ChatOpenAI(model="gpt-4-turbo-2024-04-09", temperature=temperature)
+    # llm = ChatOpenAI(model="gpt-4-turbo-2024-04-09", temperature=temperature)
+    llm = ChatOpenAI(model="gpt-4o", temperature=temperature)
 
     @chain
     def get_session_history(input_dict: dict[str, Any]):  # InputDict):
@@ -111,10 +123,11 @@ AI: """
         pprint(kwargs)
         return content
 
-    contextualize_q_system_prompt = """Given a chat history and the latest user question \
+    contextualize_q_system_prompt = """Given the chat history and the latest user question \
 which might reference context in the chat history, formulate a standalone question \
 which can be understood without the chat history. Do NOT answer the question, \
-just reformulate it if needed and otherwise return it as is.
+just reformulate it if needed and otherwise return it as is. \
+The year is 2024, look for most relevant information.
 
 Chat History:
 {chat_history}
@@ -130,6 +143,7 @@ Standalone Question: """
             "chat_history": itemgetter("chat_history"),
             "context": contextualize_q_prompt | llm | StrOutputParser() | docs_retriever | docs_to_str,
             "people": contextualize_q_prompt | llm | StrOutputParser() | people_retriever | people_to_str,
+            "slack": contextualize_q_prompt | llm | StrOutputParser() | slack_retriever | slack_to_str,
         }
         | RunnableParallel({"llm": prompt | llm, "past": RunnablePassthrough()})
         | set_messages
